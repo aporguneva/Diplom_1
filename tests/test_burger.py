@@ -11,35 +11,39 @@ class TestBurger:
         assert burger.bun.get_name() == "black bun"
 
 
-    def test_add_ingredient(self, burger, mock_sauce):
-        burger.add_ingredient(mock_sauce)
+    def test_add_ingredient(self, burger, mock_ingredient):
+        burger.add_ingredient(mock_ingredient)
 
-        assert burger.ingredients == [mock_sauce]
+        assert burger.ingredients == [mock_ingredient]
         assert len(burger.ingredients) == 1
 
 
-    def test_remove_ingredient(self, burger, mock_sauce, mock_filling):
-        burger.ingredients = [mock_sauce, mock_filling]
+    def test_remove_ingredient(self, burger, mock_ingredient):
+        ingredient_2 = Mock()
+        burger.ingredients = [mock_ingredient, ingredient_2]
 
         burger.remove_ingredient(0)
 
-        assert burger.ingredients == [mock_filling]
+        assert burger.ingredients == [ingredient_2]
 
-    def test_move_ingredient(self, burger, mock_sauce, mock_filling):
-        burger.ingredients = [mock_sauce, mock_filling]
+
+    def test_move_ingredient(self, burger, mock_ingredient):
+        ingredient_2 = Mock()
+
+        burger.ingredients = [mock_ingredient, ingredient_2]
 
         burger.move_ingredient(1, 0)
 
-        assert burger.ingredients == [mock_filling, mock_sauce]
+        assert burger.ingredients == [ingredient_2, mock_ingredient]
 
     @pytest.mark.parametrize(
-    "bun_price, ingredient_prices, expected_price",
-    [
-        (100, [100, 200], 500),
-        (200, [100, 200], 700),
-        (100, [300], 500),
-    ],
-)
+        "bun_price, ingredient_prices, expected_price",
+        [
+            (100, [100, 200], 500),
+            (200, [100, 200], 700),
+            (100, [300], 500),
+        ],
+    )
     def test_get_price(self, burger, bun_price, ingredient_prices, expected_price):
         bun = Mock()
         bun.get_price.return_value = bun_price
@@ -55,7 +59,7 @@ class TestBurger:
 
         assert burger.get_price() == expected_price
 
-
+    
     def test_get_receipt(self, burger):
         bun = Mock()
         bun.get_name.return_value = "black bun"
@@ -83,5 +87,7 @@ class TestBurger:
         )
 
         assert burger.get_receipt() == expected_receipt
+
+
 
     
